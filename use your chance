@@ -1,0 +1,23 @@
+import random
+
+
+
+while True:
+    try:
+        a=int(input("level:"))
+        if a>1:
+         c=random.randint(1,a)
+        break
+    except:pass
+
+while True:
+    try:
+        b=int(input("guess:"))
+        if b==c:
+           print("just right")
+           break
+        elif b>c:
+           print("Roo small")
+           break
+
+    except:pass
