@@ -1,0 +1,106 @@
+import tkinter as tk
+from tkinter import simpledialog, messagebox
+import requests
+
+# Function to get population data
+def get_population(country):
+    url = f"https://restcountries.com/v3.1/name/{country}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        population = data[0]['population']
+        return population
+    except (requests.exceptions.HTTPError, IndexError):
+        return None
+
+# Function to handle button click
+def handle_option(iso):
+    if iso == 'Country':
+        country = simpledialog.askstring("Input", "Enter a country name:")
+        if country:
+            population = get_population(country)
+            if population:
+                messagebox.showinfo("Population", f"The population of {country} is {population}.")
+            else:
+                messagebox.showerror("Error", "Country not found or API error.")
+    else:
+        messagebox.showinfo("Option", f"You selected {option}.")
+
+# Main GUI setup
+root = tk.Tk()
+root.title("Options Menu")
+
+options = ["iso2", "iso3", "Country"]
+
+for option in options:
+    button = tk.Button(root, text=option, command=lambda opt=option: handle_option(opt))
+    button.pack(pady=10)
+
+root.mainloop()
+
+import tkinter as tk
+from tkinter import simpledialog, messagebox
+import requests
+
+# Function to get country data
+def get_country_data(country):
+    url = f"https://restcountries.com/v3.1/name/{country}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        return data[0]
+    except (requests.exceptions.HTTPError, IndexError):
+        return None
+
+# Function to get population
+def get_population(data):
+    return data['population']
+
+# Function to get capital
+def get_capital(data):
+    return data['capital'][0]
+
+# Function to get ISO Alpha-2 code
+def get_iso2(data):
+    return data['cca2']
+
+# Function to get ISO Alpha-3 code
+def get_iso3(data):
+    return data['cca3']
+
+# Function to handle button click
+def handle_option(option):
+    country = simpledialog.askstring("Input", "Enter a country name:")
+    if country:
+        data = get_country_data(country)
+        if data:
+            if option == 'Country Population':
+                population = get_population(data)
+                messagebox.showinfo("Population", f"The population of {country} is {population}.")
+            elif option == 'Country Capital':
+                capital = get_capital(data)
+                messagebox.showinfo("Capital", f"The capital of {country} is {capital}.")
+            elif option == 'ISO Alpha-2 Code':
+                iso2 = get_iso2(data)
+                messagebox.showinfo("ISO Alpha-2 Code", f"The ISO Alpha-2 code for {country} is {iso2}.")
+            elif option == 'ISO Alpha-3 Code':
+                iso3 = get_iso3(data)
+                messagebox.showinfo("ISO Alpha-3 Code", f"The ISO Alpha-3 code for {country} is {iso3}.")
+        else:
+            messagebox.showerror("Error", "Country not found or API error.")
+    else:
+        messagebox.showinfo("Option", f"You selected {option}.")
+
+# Main GUI setup
+root = tk.Tk()
+root.title("Options Menu")
+
+options = ["Country Population", "Country Capital", "ISO Alpha-2 Code", "ISO Alpha-3 Code"]
+
+for option in options:
+    button = tk.Button(root, text=option, command=lambda opt=option: handle_option(opt))
+    button.pack(pady=10)
+
+root.mainloop()
